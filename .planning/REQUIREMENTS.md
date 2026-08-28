@@ -73,30 +73,30 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| WRITE-01 | TBD | Pending |
-| WRITE-02 | TBD | Pending |
-| WRITE-03 | TBD | Pending |
-| WRITE-04 | TBD | Pending |
-| TAG-01 | TBD | Pending |
-| TAG-02 | TBD | Pending |
-| TAG-03 | TBD | Pending |
-| TAG-04 | TBD | Pending |
-| SEARCH-01 | TBD | Pending |
-| SEARCH-02 | TBD | Pending |
-| SEARCH-03 | TBD | Pending |
-| SEARCH-04 | TBD | Pending |
-| SEARCH-05 | TBD | Pending |
-| NAV-01 | TBD | Pending |
-| NAV-02 | TBD | Pending |
-| PLATFORM-01 | TBD | Pending |
-| PLATFORM-02 | TBD | Pending |
-| PLATFORM-03 | TBD | Pending |
+| WRITE-01 | Phase 1 | Pending |
+| WRITE-02 | Phase 1 | Pending |
+| WRITE-03 | Phase 1 | Pending |
+| WRITE-04 | Phase 1 | Pending |
+| NAV-01 | Phase 1 | Pending |
+| NAV-02 | Phase 1 | Pending |
+| PLATFORM-01 | Phase 1 | Pending |
+| PLATFORM-02 | Phase 1 | Pending |
+| PLATFORM-03 | Phase 1 | Pending |
+| TAG-01 | Phase 2 | Pending |
+| TAG-02 | Phase 2 | Pending |
+| TAG-03 | Phase 2 | Pending |
+| SEARCH-01 | Phase 3 | Pending |
+| SEARCH-02 | Phase 3 | Pending |
+| SEARCH-03 | Phase 3 | Pending |
+| SEARCH-04 | Phase 3 | Pending |
+| SEARCH-05 | Phase 3 | Pending |
+| TAG-04 | Phase 3 | Pending |
 
 **Coverage:**
 - v1 requirements: 18 total
-- Mapped to phases: 0 (pending roadmap creation)
-- Unmapped: 18 ⚠️ (expected — filled by `/gsd-new-project` roadmap step next)
+- Mapped to phases: 18 (100%)
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-08-28*
-*Last updated: 2026-08-28 after initial definition*
+*Last updated: 2026-08-28 after roadmap creation*
