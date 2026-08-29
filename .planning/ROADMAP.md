@@ -7,6 +7,7 @@ Journal ships as three vertical slices, each a usable, demoable increment of the
 ## Phases
 
 **Phase Numbering:**
+
 - Integer phases (1, 2, 3): Planned milestone work
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
@@ -19,49 +20,66 @@ Decimal phases appear between their surrounding integers in numeric order.
 ## Phase Details
 
 ### Phase 1: Reliable Daily Writing & Navigation
+
 **Goal**: User can open the app to a blank page for today, write freely with entries automatically segmented by blank lines, trust that nothing is ever lost, and navigate to/edit/delete any past day — as an installable native app on macOS and Windows (unsigned for v1 with a documented first-launch bypass, per D-10/D-11) with the dark, minimal notepad look.
 **Mode:** mvp
 **Depends on**: Nothing (first phase)
 **Requirements**: WRITE-01, WRITE-02, WRITE-03, WRITE-04, NAV-01, NAV-02, PLATFORM-01, PLATFORM-02, PLATFORM-03
 **Success Criteria** (what must be TRUE):
+
   1. User opens the app and lands on a blank canvas for today's date, ready to type immediately.
   2. Typing freely and pressing Enter twice visibly splits the text into separate entries with no manual action required.
   3. Typed content is saved automatically and durably (survives an app crash or force-quit mid-write) as one plain Markdown file per day, readable in any text editor outside the app.
   4. User can open a calendar picker, jump to any previous day, and freely edit or delete that day's content — nothing is locked once the day ends.
   5. The installed app launches as a native-feeling app on both macOS and Windows with a dark-mode-only, minimal visual style.
+
 **Plans:** 4 plans
 
 Plans:
+**Wave 1**
+
 - [ ] 01-01-PLAN.md — Walking skeleton: Rust toolchain, Tauri + React scaffold, storage-location decision, and the end-to-end write-to-disk tracer
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 01-02-PLAN.md — Durability: flush on quit and day-navigation, serialized writes, byte-fidelity round-trip, empty-day file semantics
-- [ ] 01-03-PLAN.md — Calendar picker with content dots, past-day editing, and confirmed delete-day
 - [ ] 01-04-PLAN.md — Two-OS CI build matrix producing unsigned macOS and Windows installers, plus the README bypass docs
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 01-03-PLAN.md — Calendar picker with content dots, past-day editing, and confirmed delete-day
 
 **UI hint**: yes
 
 ### Phase 2: Inline Tagging with Visual Pills
+
 **Goal**: User can categorize any entry by typing `#hashtags` anywhere in the text and see them rendered immediately as clear visual pills instead of raw text, with multiple tags allowed per entry.
 **Mode:** mvp
 **Depends on**: Phase 1
 **Requirements**: TAG-01, TAG-02, TAG-03
 **Success Criteria** (what must be TRUE):
+
   1. Typing `#word` anywhere inside an entry turns it into a recognizable visual pill as soon as it's recognized.
   2. A single entry can carry more than one tag, and each renders as its own distinct pill.
   3. Pills coexist correctly with normal editing — cursor movement, undo/redo, copy/paste — without corrupting or desyncing from the underlying plain text.
+
 **Plans**: TBD
 **UI hint**: yes
 
 ### Phase 3: Reliable Tag Search & Matching
+
 **Goal**: No matter how a tag was typed — exact, typo'd, or a near-duplicate of an existing tag — searching or typing it reliably surfaces or suggests the right canonical tag, with anything genuinely ambiguous caught in a reviewable bucket rather than silently misfiled. This is the app's stated core value.
 **Mode:** mvp
 **Depends on**: Phase 2
 **Requirements**: SEARCH-01, SEARCH-02, SEARCH-03, SEARCH-04, SEARCH-05, TAG-04
 **Success Criteria** (what must be TRUE):
+
   1. Searching a known tag (e.g. `#thought`) returns every entry tagged with it, each showing its date; clicking a result jumps straight to that entry's day page, editable in place.
   2. Searching a typo'd variant (e.g. `#thouhts`) still returns the entries filed under the correct tag.
   3. Near-duplicate tags (e.g. `#thought` / `#thoughts`) are automatically merged into a single searchable category.
   4. Tags that don't cleanly match any known tag land in a filterable, correctable "unmatched" bucket instead of being silently lost or misfiled.
   5. While typing a `#tag`, the app suggests a matching known tag that is inserted only via an explicit Tab press — never by continued typing or pressing space.
+
 **Plans**: TBD
 **UI hint**: yes
 
