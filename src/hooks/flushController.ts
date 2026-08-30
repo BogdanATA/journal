@@ -40,8 +40,12 @@ export function createFlushController(
       .then(() =>
         save(text).catch((err: unknown) => {
           // Keep the text pending so the next flush retries it, rather
-          // than silently dropping the user's words.
-          pending = text;
+          // than silently dropping the user's words — but only if nothing
+          // newer has been scheduled since this save started. Otherwise
+          // this would clobber fresher edits with this stale snapshot.
+          if (pending === null) {
+            pending = text;
+          }
           throw err;
         }),
       );
