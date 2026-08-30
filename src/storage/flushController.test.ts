@@ -97,3 +97,17 @@ test("hasPending() is true after schedule() and false once the write resolves", 
   await controller.flush();
   assert.equal(controller.hasPending(), false);
 });
+
+test("cancel() clears a scheduled write so a subsequent flush() never calls save (Plan 03 delete-day)", async () => {
+  const calls: string[] = [];
+  const controller = createFlushController(async (text) => {
+    calls.push(text);
+  });
+
+  controller.schedule("should never reach disk");
+  controller.cancel();
+  assert.equal(controller.hasPending(), false);
+
+  await controller.flush();
+  assert.deepEqual(calls, []);
+});

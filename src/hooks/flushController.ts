@@ -21,6 +21,7 @@ export interface FlushController {
   schedule: (text: string) => void;
   flush: () => Promise<void>;
   hasPending: () => boolean;
+  cancel: () => void;
 }
 
 export function createFlushController(
@@ -76,5 +77,20 @@ export function createFlushController(
     return pending !== null;
   }
 
-  return { schedule, flush, hasPending };
+  /**
+   * Clears a scheduled write without ever invoking `save` — used by the
+   * delete-day flow (Plan 03) so a debounce timer queued just before a
+   * confirmed delete can never fire afterward and resurrect the just-removed
+   * file with stale text. Does not touch a write already in flight; that
+   * write's own promise settles normally (see `runSave`).
+   */
+  function cancel(): void {
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
+    pending = null;
+  }
+
+  return { schedule, flush, hasPending, cancel };
 }
