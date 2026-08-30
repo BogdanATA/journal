@@ -194,8 +194,19 @@ function App() {
     // with stale text. Must happen only after the user confirms (cancelling
     // earlier, e.g. before the dialog opens, would silently drop their
     // pending text on a Cancel click, which the "do nothing at all"
-    // contract above forbids).
+    // contract above forbids). cancel() alone does not touch a write that
+    // is already in flight (its own promise settles independently), so a
+    // debounce timer that had already fired right before the click could
+    // still land after deleteDay() and resurrect the file — await flush()
+    // as well, which waits out anything already in flight before deleting
+    // (CR-04). A failed flush here just means nothing new landed on disk;
+    // proceed to delete regardless.
     cancel();
+    try {
+      await flush();
+    } catch {
+      // Intentionally ignored — see comment above.
+    }
     try {
       await deleteDay(currentDate);
     } catch (err) {
@@ -211,7 +222,7 @@ function App() {
     // write when there is no content and no file — so that scheduled save
     // can never recreate the file we just removed (Plan 02's write-skip
     // rule, asserted explicitly here per this task's own requirement).
-  }, [currentDate, cancel]);
+  }, [currentDate, cancel, flush]);
 
   // Flush on quit (D-02): intercept the window close request, flush the
   // pending save, and only then let the window actually close. `destroy()`
