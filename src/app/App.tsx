@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { confirm } from "@tauri-apps/plugin-dialog";
 import { EditorCanvas } from "../editor/EditorCanvas";
-import { loadDay, saveDay } from "../storage/dayFile";
+import { dayHasContent, loadDay, saveDay } from "../storage/dayFile";
+import { deleteDay } from "../storage/dayDelete";
 import { useDebouncedFlush } from "../hooks/useDebouncedFlush";
 import { CalendarNav } from "../calendar/CalendarNav";
 
@@ -27,14 +29,38 @@ function CalendarIcon() {
   );
 }
 
+function TrashIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <polyline points="3 6 5 6 21 6" />
+      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+    </svg>
+  );
+}
+
 function App() {
   const [currentDate, setCurrentDate] = useState(() => new Date());
   const [initialText, setInitialText] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [calendarOpen, setCalendarOpen] = useState(false);
+  // Tracks whether the currently loaded day has real content, purely to
+  // decide whether the delete-day control is shown — never consumed by
+  // save/load logic (dayHasContent in dayFile.ts remains the single
+  // definition of "this day has entries" for that purpose).
+  const [hasContent, setHasContent] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
 
-  const { schedule, flush } = useDebouncedFlush((text) => saveDay(currentDate, text));
+  const { schedule, flush, cancel } = useDebouncedFlush((text) => saveDay(currentDate, text));
 
   // Returns focus to the editor's contenteditable surface — used whenever
   // the calendar closes, so the keyboard path (Mod-j / Escape) never traps
@@ -79,7 +105,10 @@ function App() {
     let cancelled = false;
     loadDay(currentDate)
       .then((text) => {
-        if (!cancelled) setInitialText(text);
+        if (!cancelled) {
+          setInitialText(text);
+          setHasContent(dayHasContent(text));
+        }
       })
       .catch((err: unknown) => {
         if (!cancelled) {
@@ -115,6 +144,7 @@ function App() {
         const text = await loadDay(next);
         setCurrentDate(next);
         setInitialText(text);
+        setHasContent(dayHasContent(text));
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
@@ -133,6 +163,47 @@ function App() {
     },
     [goToDay, focusEditor],
   );
+
+  /**
+   * The one destructive action in the app (D-09/T-01-10) — deletes the
+   * currently loaded day's whole file, after an explicit confirmation
+   * naming that exact date. This is the only confirmation dialog anywhere
+   * in the app: ordinary editing (backspacing, select-delete, clearing the
+   * buffer by hand) never prompts, because that is just normal typing and
+   * the existing autosave/write-skip path already handles it (dayFile.ts).
+   */
+  const handleDeleteDay = useCallback(async () => {
+    const dateLabel = format(currentDate, "EEEE, d MMMM yyyy");
+    const confirmed = await confirm(
+      `Delete the entry for ${dateLabel}? This cannot be undone — there is no backup.`,
+      { title: "Delete day", kind: "warning", okLabel: "Delete", cancelLabel: "Cancel" },
+    );
+    if (!confirmed) return; // No partial clear, no save — do nothing at all.
+
+    // Cancel any debounced write still pending for this date *before*
+    // deleting the file — otherwise a save scheduled just before the click
+    // could fire after deleteDay() resolves and silently resurrect the file
+    // with stale text. Must happen only after the user confirms (cancelling
+    // earlier, e.g. before the dialog opens, would silently drop their
+    // pending text on a Cancel click, which the "do nothing at all"
+    // contract above forbids).
+    cancel();
+    try {
+      await deleteDay(currentDate);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+      return;
+    }
+    setInitialText("");
+    setHasContent(false);
+    setError(null);
+    // The now-empty buffer's own change still schedules a debounced save
+    // via EditorCanvas's updateListener, but saveDay's write-skip rule
+    // (dayFile.ts: !dayHasContent(text) && !exists()) already refuses to
+    // write when there is no content and no file — so that scheduled save
+    // can never recreate the file we just removed (Plan 02's write-skip
+    // rule, asserted explicitly here per this task's own requirement).
+  }, [currentDate, cancel]);
 
   // Flush on quit (D-02): intercept the window close request, flush the
   // pending save, and only then let the window actually close. `destroy()`
@@ -179,6 +250,17 @@ function App() {
       <div className="chrome-row">
         <h1 className="day-header">{today}</h1>
         <div className="chrome-actions">
+          {hasContent && (
+            <button
+              type="button"
+              className="icon-button delete-button"
+              onClick={() => void handleDeleteDay()}
+              aria-label={`Delete entry for ${today}`}
+              title="Delete this day"
+            >
+              <TrashIcon />
+            </button>
+          )}
           <button
             type="button"
             className="icon-button"
@@ -197,6 +279,7 @@ function App() {
           initialText={initialText}
           onScheduleSave={(text) => {
             schedule(text);
+            setHasContent(dayHasContent(text));
             setError(null);
           }}
           onFlush={() => {

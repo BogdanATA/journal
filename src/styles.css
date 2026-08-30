@@ -83,6 +83,15 @@ body {
   border-color: var(--muted);
 }
 
+.delete-button {
+  color: #f38ba8;
+}
+
+.delete-button:hover {
+  color: #f38ba8;
+  border-color: #f38ba8;
+}
+
 .calendar-popover {
   position: absolute;
   top: 4rem;
