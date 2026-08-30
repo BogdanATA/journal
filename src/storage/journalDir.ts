@@ -1,5 +1,5 @@
 import { BaseDirectory, exists, mkdir } from "@tauri-apps/plugin-fs";
-import { JOURNAL_SUBDIR } from "./dayPath";
+import { JOURNAL_SUBDIR } from "./dayPath.ts";
 
 /**
  * Single source of truth for the journal's base directory.
