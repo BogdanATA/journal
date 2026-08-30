@@ -48,3 +48,17 @@ body {
   font-weight: 500;
   margin: 0 0 1.5rem 0;
 }
+
+.error {
+  color: #f38ba8;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+}
+
+.cm-editor {
+  height: calc(100vh - 8rem);
+}

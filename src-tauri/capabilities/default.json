@@ -1,9 +1,31 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "Capability for the main window",
+  "description": "Journal day-file read/write access, scoped to the journal subfolder only",
   "windows": ["main"],
   "permissions": [
-    "core:default"
+    "core:default",
+    "fs:default",
+    "dialog:default",
+    {
+      "identifier": "fs:allow-read-text-file",
+      "allow": [{ "path": "$APPDATA/journal" }, { "path": "$APPDATA/journal/*" }]
+    },
+    {
+      "identifier": "fs:allow-write-text-file",
+      "allow": [{ "path": "$APPDATA/journal" }, { "path": "$APPDATA/journal/*" }]
+    },
+    {
+      "identifier": "fs:allow-mkdir",
+      "allow": [{ "path": "$APPDATA/journal" }, { "path": "$APPDATA/journal/*" }]
+    },
+    {
+      "identifier": "fs:allow-read-dir",
+      "allow": [{ "path": "$APPDATA/journal" }, { "path": "$APPDATA/journal/*" }]
+    },
+    {
+      "identifier": "fs:allow-remove",
+      "allow": [{ "path": "$APPDATA/journal" }, { "path": "$APPDATA/journal/*" }]
+    }
   ]
 }
