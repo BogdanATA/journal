@@ -10,9 +10,9 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Writing & Storage
 
 - [x] **WRITE-01**: User can open the app and see a blank canvas for today's writing, ready to type immediately
-- [ ] **WRITE-02**: User's writing is autosaved continuously without an explicit save action
-- [ ] **WRITE-03**: Pressing Enter twice (a blank line) between blocks of text automatically splits them into separate, distinct entries
-- [ ] **WRITE-04**: Writing is saved as local plain text/Markdown files, one per day, readable outside the app without needing the app itself
+- [x] **WRITE-02**: User's writing is autosaved continuously without an explicit save action
+- [x] **WRITE-03**: Pressing Enter twice (a blank line) between blocks of text automatically splits them into separate, distinct entries
+- [x] **WRITE-04**: Writing is saved as local plain text/Markdown files, one per day, readable outside the app without needing the app itself
 
 ### Tagging
 
@@ -74,9 +74,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | WRITE-01 | Phase 1 | Complete |
-| WRITE-02 | Phase 1 | Pending |
-| WRITE-03 | Phase 1 | Pending |
-| WRITE-04 | Phase 1 | Pending |
+| WRITE-02 | Phase 1 | Complete |
+| WRITE-03 | Phase 1 | Complete |
+| WRITE-04 | Phase 1 | Complete |
 | NAV-01 | Phase 1 | Pending |
 | NAV-02 | Phase 1 | Pending |
 | PLATFORM-01 | Phase 1 | Pending |
