@@ -245,7 +245,11 @@ function App() {
       .onCloseRequested(async (event) => {
         event.preventDefault();
         if (closingRef.current) {
-          await flushPromiseRef.current;
+          try {
+            await flushPromiseRef.current;
+          } catch (err) {
+            console.error("Flush failed on quit; last edit may not be saved", err);
+          }
           await win.destroy();
           return;
         }
@@ -253,6 +257,8 @@ function App() {
         flushPromiseRef.current = flush();
         try {
           await flushPromiseRef.current;
+        } catch (err) {
+          console.error("Flush failed on quit; last edit may not be saved", err);
         } finally {
           await win.destroy();
         }
