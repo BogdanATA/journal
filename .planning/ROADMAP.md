@@ -33,7 +33,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. User can open a calendar picker, jump to any previous day, and freely edit or delete that day's content — nothing is locked once the day ends.
   5. The installed app launches as a native-feeling app on both macOS and Windows with a dark-mode-only, minimal visual style.
 
-**Plans:** 3/4 plans executed
+**Plans:** 4/4 plans executed
 
 Plans:
 **Wave 1**
@@ -43,7 +43,7 @@ Plans:
 **Wave 2** *(blocked on Wave 1 completion)*
 
 - [x] 01-02-PLAN.md — Durability: flush on quit and day-navigation, serialized writes, byte-fidelity round-trip, empty-day file semantics
-- [ ] 01-04-PLAN.md — Two-OS CI build matrix producing unsigned macOS and Windows installers, plus the README bypass docs
+- [x] 01-04-PLAN.md — Two-OS CI build matrix producing unsigned macOS and Windows installers, plus the README bypass docs
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -90,6 +90,6 @@ Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Reliable Daily Writing & Navigation | 3/4 | In Progress|  |
+| 1. Reliable Daily Writing & Navigation | 4/4 | In Progress|  |
 | 2. Inline Tagging with Visual Pills | 0/TBD | Not started | - |
 | 3. Reliable Tag Search & Matching | 0/TBD | Not started | - |

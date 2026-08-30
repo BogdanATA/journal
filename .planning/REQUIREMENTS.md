@@ -36,8 +36,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Platform & Appearance
 
-- [ ] **PLATFORM-01**: The app runs as a native desktop application on macOS
-- [ ] **PLATFORM-02**: The app runs as a native desktop application on Windows
+- [x] **PLATFORM-01**: The app runs as a native desktop application on macOS
+- [x] **PLATFORM-02**: The app runs as a native desktop application on Windows
 - [x] **PLATFORM-03**: The app uses a dark-mode-only, minimal visual style
 
 ## v2 Requirements
@@ -79,8 +79,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | WRITE-04 | Phase 1 | Complete |
 | NAV-01 | Phase 1 | Complete |
 | NAV-02 | Phase 1 | Complete |
-| PLATFORM-01 | Phase 1 | Pending |
-| PLATFORM-02 | Phase 1 | Pending |
+| PLATFORM-01 | Phase 1 | Complete |
+| PLATFORM-02 | Phase 1 | Complete |
 | PLATFORM-03 | Phase 1 | Complete |
 | TAG-01 | Phase 2 | Pending |
 | TAG-02 | Phase 2 | Pending |

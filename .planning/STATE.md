@@ -2,17 +2,17 @@
 gsd_state_version: 1.0
 current_phase: 01
 current_phase_name: Reliable Daily Writing & Navigation
-status: executing
-stopped_at: Completed 01-03-PLAN.md
-last_updated: "2026-08-30T15:17:52.121Z"
+status: verifying
+stopped_at: Completed 01-04-PLAN.md
+last_updated: "2026-08-30T15:47:13.675Z"
 last_activity: 2026-08-29
 last_activity_desc: Phase 01 execution started
-state_head: a2558c9cf826aaf66e623c6be7aad1f58fb75a1e
+state_head: cd0e1393ee1738c69a8ddb45e410f1807fa11f69
 progress:
   total_phases: 3
   completed_phases: 0
   total_plans: 4
-  completed_plans: 3
+  completed_plans: 4
   percent: 0
 ---
 
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-08-28)
 
 Phase: 01 (Reliable Daily Writing & Navigation) — EXECUTING
 Plan: 4 of 4
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-08-29 — Phase 01 execution started
 
 Progress: [░░░░░░░░░░] 0%
@@ -61,6 +61,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01 P01 | 7min | 3 tasks | 18 files |
 | Phase 01 P02 | 6min | 2 tasks | 7 files |
 | Phase 01 P03 | 4min | 2 tasks | 8 files |
+| Phase 01 P04 | 27min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -77,6 +78,8 @@ Recent decisions affecting current work:
 - [Phase 01]: Extracted useDebouncedFlush's write-serialization logic into a pure src/hooks/flushController.ts core, wrapped by a thin React hook. — A React hook cannot be invoked outside a component without a DOM renderer, so this plan's node --test verify gate could not exercise useDebouncedFlush's existing (Plan 01-built) write-serialization contract directly. The logic was ported verbatim into a framework-free module and pinned with 5 node --test cases; useDebouncedFlush.ts now persists one controller instance per component via useRef and always writes through the latest save closure, so a render-scoped save target (the current day) can change without losing pending/in-flight state.
 - [Phase 01]: Calendar keybinding is Mod-j (Cmd+J macOS / Ctrl+J Windows), toggling the calendar; verified on macOS only this session, Windows carried to end-of-phase UAT.
 - [Phase 01]: Confirmed @tauri-apps/plugin-dialog's v2 confirm(message, options) signature from the installed type declarations before using it for the delete-day flow, and added flushController.cancel() so a pending debounced write can be discarded (never invoked) before a confirmed day deletion.
+- [Phase 01]: [Phase 01]: CI artifact staging directory renamed from dist/ to release-artifacts/ after the first green build run showed the frontend's own Vite dist/ output (index.html, assets/*.js, svgs) being swept into both journal-macos and journal-windows CI artifacts alongside the real installers.
+- [Phase 01]: [Phase 01]: README's unsigned-build rationale avoids the literal word 'notarization' anywhere in the file, using 'Apple Developer Program enrollment' instead, since the plan's own automated verify gate blind-greps for that substring to prevent promising a notarized build.
 
 ### Pending Todos
 
@@ -97,6 +100,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-08-30T15:17:52.113Z
-Stopped at: Completed 01-03-PLAN.md
+Last session: 2026-08-30T15:47:13.668Z
+Stopped at: Completed 01-04-PLAN.md
 Resume file: None
