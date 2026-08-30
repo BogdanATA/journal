@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Run tests
+        run: npm test
+
       - name: Add macOS Intel target
         if: matrix.os == 'macos-latest'
         run: rustup target add x86_64-apple-darwin
