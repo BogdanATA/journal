@@ -1,71 +1,32 @@
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
+import { createFlushController, type FlushController } from "./flushController";
 
 /**
- * schedule/flush debounce pair with in-flight write serialization.
+ * React wrapper around the pure `flushController` write-serialization core
+ * (src/hooks/flushController.ts).
  *
- * `schedule(text)` resets a `delayMs` timer (default 1200ms, inside D-01's
- * 1-2s band). `flush()` clears the timer and awaits the save of whatever is
- * pending. Writes are serialized on an in-flight promise ref so two saves
- * can never interleave on the same file; when a save rejects, the pending
- * text is kept so the next flush retries rather than dropping it (D-01/D-02,
- * T-01-04 mitigation).
+ * The controller instance is created once per component instance and never
+ * replaced, so the returned `schedule`/`flush`/`hasPending` keep a stable
+ * identity across renders — safe to list in an effect's dependency array
+ * (e.g. the app-close interception in App.tsx) without re-registering that
+ * effect on every render. The `save` callback itself is *not* captured at
+ * creation time: each write reads it from `saveRef`, which is updated on
+ * every render, so a `save` closure over render-scoped state (e.g. the
+ * currently open day) is always current for a write that starts after that
+ * render — this is what lets `goToDay` change which file `flush()` targets
+ * without recreating the controller (and losing its pending/in-flight
+ * state) mid-navigation.
  */
 export function useDebouncedFlush(
   save: (text: string) => Promise<void>,
   delayMs = 1200,
-): { schedule: (text: string) => void; flush: () => Promise<void>; hasPending: () => boolean } {
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const pending = useRef<string | null>(null);
-  const inFlight = useRef<Promise<void>>(Promise.resolve());
+): FlushController {
+  const saveRef = useRef(save);
+  saveRef.current = save;
 
-  const runSave = useCallback(
-    (text: string): Promise<void> => {
-      const next = inFlight.current
-        .catch(() => {
-          // A prior save's rejection must not block the next attempt.
-        })
-        .then(() =>
-          save(text).catch((err) => {
-            // Keep the text pending so the next flush retries it, rather
-            // than silently dropping the user's words.
-            pending.current = text;
-            throw err;
-          }),
-        );
-      inFlight.current = next;
-      return next;
-    },
-    [save],
-  );
-
-  const flush = useCallback((): Promise<void> => {
-    if (timer.current) {
-      clearTimeout(timer.current);
-      timer.current = null;
-    }
-    if (pending.current === null) {
-      return inFlight.current.catch(() => {
-        // Swallow: any error from a prior save was already recorded via
-        // pending.current inside runSave, and will be retried by the next flush.
-      });
-    }
-    const text = pending.current;
-    pending.current = null;
-    return runSave(text);
-  }, [runSave]);
-
-  const schedule = useCallback(
-    (text: string) => {
-      pending.current = text;
-      if (timer.current) clearTimeout(timer.current);
-      timer.current = setTimeout(() => {
-        void flush();
-      }, delayMs);
-    },
-    [delayMs, flush],
-  );
-
-  const hasPending = useCallback(() => pending.current !== null, []);
-
-  return { schedule, flush, hasPending };
+  const controllerRef = useRef<FlushController | null>(null);
+  if (controllerRef.current === null) {
+    controllerRef.current = createFlushController((text) => saveRef.current(text), delayMs);
+  }
+  return controllerRef.current;
 }

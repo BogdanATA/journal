@@ -39,6 +39,8 @@ test("flush() awaits an in-flight write, then the newest pending write, in order
   controller.schedule("A");
   const firstFlush = controller.flush(); // starts save("A"); still pending
 
+  await new Promise((resolve) => setTimeout(resolve, 0)); // let save("A") actually start
+
   controller.schedule("B");
   const secondFlush = controller.flush(); // must wait for "A" before starting "B"
 
