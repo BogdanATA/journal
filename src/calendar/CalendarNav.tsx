@@ -47,7 +47,12 @@ export function CalendarNav(props: {
       .then((days) => {
         if (!cancelled) setDaysWithContent(days);
       })
-      .catch(() => {
+      .catch((err: unknown) => {
+        // A scan failure (e.g. a permissions error reading the journal
+        // directory) is otherwise indistinguishable from a genuinely empty
+        // journal — log it so it's diagnosable rather than silently
+        // rendering as "no days have content" (WR-03).
+        console.error("Failed to scan journal directory for calendar dots", err);
         if (!cancelled) setDaysWithContent(new Set());
       });
     return () => {
