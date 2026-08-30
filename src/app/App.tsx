@@ -270,6 +270,25 @@ function App() {
     };
   }, [flush]);
 
+  // Stable identities for the handlers passed into <EditorCanvas>, so
+  // EditorCanvas's own useMemo over its behavior extensions isn't
+  // invalidated on every App render (App re-renders on every keystroke via
+  // handleScheduleSave itself) — otherwise a new extensions array would be
+  // handed to @uiw/react-codemirror on every keystroke (WR-01).
+  const handleScheduleSave = useCallback(
+    (text: string) => {
+      schedule(text);
+      setHasContent(dayHasContent(text));
+      setError(null);
+    },
+    [schedule],
+  );
+  const handleEditorFlush = useCallback(() => {
+    void flush().catch((err: unknown) => {
+      setError(err instanceof Error ? err.message : String(err));
+    });
+  }, [flush]);
+
   const today = format(currentDate, "EEEE, d MMMM yyyy");
 
   return (
@@ -306,16 +325,8 @@ function App() {
           date={currentDate}
           initialText={initialText}
           readOnly={navigating}
-          onScheduleSave={(text) => {
-            schedule(text);
-            setHasContent(dayHasContent(text));
-            setError(null);
-          }}
-          onFlush={() => {
-            void flush().catch((err: unknown) => {
-              setError(err instanceof Error ? err.message : String(err));
-            });
-          }}
+          onScheduleSave={handleScheduleSave}
+          onFlush={handleEditorFlush}
         />
       )}
       <CalendarNav
