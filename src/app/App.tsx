@@ -217,9 +217,15 @@ function App() {
   // pending save, and only then let the window actually close. `destroy()`
   // always runs from `finally` so a rejected flush can never leave the app
   // unquittable (T-01-05). `closingRef` guards re-entry: a second close
-  // request while the first flush is still running destroys immediately
-  // instead of queueing a second flush.
+  // request while the first flush is still running awaits that same
+  // in-flight flush (via `flushPromiseRef`) rather than destroying the
+  // window while its write is still outstanding (CR-03).
   const closingRef = useRef(false);
+  // Tracks the in-flight close-time flush so a second close request (a
+  // double Cmd+Q/Alt+F4, or an OS logout sending the close event twice)
+  // awaits the first flush's write instead of destroying the window out
+  // from under it (CR-03).
+  const flushPromiseRef = useRef<Promise<void> | null>(null);
   useEffect(() => {
     let unlisten: (() => void) | undefined;
     let cancelled = false;
@@ -228,12 +234,14 @@ function App() {
       .onCloseRequested(async (event) => {
         event.preventDefault();
         if (closingRef.current) {
+          await flushPromiseRef.current;
           await win.destroy();
           return;
         }
         closingRef.current = true;
+        flushPromiseRef.current = flush();
         try {
-          await flush();
+          await flushPromiseRef.current;
         } finally {
           await win.destroy();
         }
