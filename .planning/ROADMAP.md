@@ -33,7 +33,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. User can open a calendar picker, jump to any previous day, and freely edit or delete that day's content — nothing is locked once the day ends.
   5. The installed app launches as a native-feeling app on both macOS and Windows with a dark-mode-only, minimal visual style.
 
-**Plans:** 2/4 plans executed
+**Plans:** 3/4 plans executed
 
 Plans:
 **Wave 1**
@@ -47,7 +47,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-03-PLAN.md — Calendar picker with content dots, past-day editing, and confirmed delete-day
+- [x] 01-03-PLAN.md — Calendar picker with content dots, past-day editing, and confirmed delete-day
 
 **UI hint**: yes
 
@@ -90,6 +90,6 @@ Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Reliable Daily Writing & Navigation | 2/4 | In Progress|  |
+| 1. Reliable Daily Writing & Navigation | 3/4 | In Progress|  |
 | 2. Inline Tagging with Visual Pills | 0/TBD | Not started | - |
 | 3. Reliable Tag Search & Matching | 0/TBD | Not started | - |

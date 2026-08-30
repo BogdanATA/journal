@@ -31,8 +31,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Navigation
 
-- [ ] **NAV-01**: User can open a calendar picker to browse to any previous day's page
-- [ ] **NAV-02**: Past days are fully editable and deletable, not locked once the day has ended
+- [x] **NAV-01**: User can open a calendar picker to browse to any previous day's page
+- [x] **NAV-02**: Past days are fully editable and deletable, not locked once the day has ended
 
 ### Platform & Appearance
 
@@ -77,8 +77,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | WRITE-02 | Phase 1 | Complete |
 | WRITE-03 | Phase 1 | Complete |
 | WRITE-04 | Phase 1 | Complete |
-| NAV-01 | Phase 1 | Pending |
-| NAV-02 | Phase 1 | Pending |
+| NAV-01 | Phase 1 | Complete |
+| NAV-02 | Phase 1 | Complete |
 | PLATFORM-01 | Phase 1 | Pending |
 | PLATFORM-02 | Phase 1 | Pending |
 | PLATFORM-03 | Phase 1 | Complete |

@@ -3,16 +3,16 @@ gsd_state_version: 1.0
 current_phase: 01
 current_phase_name: Reliable Daily Writing & Navigation
 status: executing
-stopped_at: Completed 01-02-PLAN.md
-last_updated: "2026-08-30T06:08:16.024Z"
+stopped_at: Completed 01-03-PLAN.md
+last_updated: "2026-08-30T15:17:52.121Z"
 last_activity: 2026-08-29
 last_activity_desc: Phase 01 execution started
-state_head: 6d95b3cca50ff6b312dda77ff0d8af381f2ab3dc
+state_head: a2558c9cf826aaf66e623c6be7aad1f58fb75a1e
 progress:
   total_phases: 3
   completed_phases: 0
   total_plans: 4
-  completed_plans: 2
+  completed_plans: 3
   percent: 0
 ---
 
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-08-28)
 ## Current Position
 
 Phase: 01 (Reliable Daily Writing & Navigation) — EXECUTING
-Plan: 3 of 4
+Plan: 4 of 4
 Status: Ready to execute
 Last activity: 2026-08-29 — Phase 01 execution started
 
@@ -60,6 +60,7 @@ Progress: [░░░░░░░░░░] 0%
 |------|----------|-------|-------|
 | Phase 01 P01 | 7min | 3 tasks | 18 files |
 | Phase 01 P02 | 6min | 2 tasks | 7 files |
+| Phase 01 P03 | 4min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -74,6 +75,8 @@ Recent decisions affecting current work:
 - [Phase 01]: Journal storage location: $APPDATA/journal/ (Tauri BaseDirectory.AppData) — Decided by the project owner via an interactive question in the orchestrating session (Phase 1 Plan 1 Task 2's checkpoint:decision). Chosen over $DOCUMENT/Journal for: conventional app-data home on both platforms, coverage by plugin-fs's default permission set, no macOS privacy prompt on first write, and zero risk of colliding with an unrelated user folder. Encoded in src/storage/journalDir.ts (JOURNAL_BASE_DIR) and src/storage/dayPath.ts (JOURNAL_SUBDIR = "journal"), with the Tauri capability scope locked to $APPDATA/journal and $APPDATA/journal/* only.
 - [Phase 01]: @vitejs/plugin-react bumped to ^6 instead of the plan's pinned ^4 — The plan pinned @vitejs/plugin-react@^4 against vite@^8 per CLAUDE.md's Version Compatibility table, but the published peer range on @vitejs/plugin-react@4.7.0 (npm registry) only covers vite ^4-^7, causing an ERESOLVE conflict. Installed @vitejs/plugin-react@^6.1.1 instead, whose peer range is vite: ^8.0.0 — resolved cleanly with no peer warnings and no --legacy-peer-deps override.
 - [Phase 01]: Extracted useDebouncedFlush's write-serialization logic into a pure src/hooks/flushController.ts core, wrapped by a thin React hook. — A React hook cannot be invoked outside a component without a DOM renderer, so this plan's node --test verify gate could not exercise useDebouncedFlush's existing (Plan 01-built) write-serialization contract directly. The logic was ported verbatim into a framework-free module and pinned with 5 node --test cases; useDebouncedFlush.ts now persists one controller instance per component via useRef and always writes through the latest save closure, so a render-scoped save target (the current day) can change without losing pending/in-flight state.
+- [Phase 01]: Calendar keybinding is Mod-j (Cmd+J macOS / Ctrl+J Windows), toggling the calendar; verified on macOS only this session, Windows carried to end-of-phase UAT.
+- [Phase 01]: Confirmed @tauri-apps/plugin-dialog's v2 confirm(message, options) signature from the installed type declarations before using it for the delete-day flow, and added flushController.cancel() so a pending debounced write can be discarded (never invoked) before a confirmed day deletion.
 
 ### Pending Todos
 
@@ -94,6 +97,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-08-30T06:08:16.017Z
-Stopped at: Completed 01-02-PLAN.md
+Last session: 2026-08-30T15:17:52.113Z
+Stopped at: Completed 01-03-PLAN.md
 Resume file: None
