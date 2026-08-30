@@ -33,12 +33,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. User can open a calendar picker, jump to any previous day, and freely edit or delete that day's content — nothing is locked once the day ends.
   5. The installed app launches as a native-feeling app on both macOS and Windows with a dark-mode-only, minimal visual style.
 
-**Plans:** 4 plans
+**Plans:** 1/4 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 01-01-PLAN.md — Walking skeleton: Rust toolchain, Tauri + React scaffold, storage-location decision, and the end-to-end write-to-disk tracer
+- [x] 01-01-PLAN.md — Walking skeleton: Rust toolchain, Tauri + React scaffold, storage-location decision, and the end-to-end write-to-disk tracer
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -90,6 +90,6 @@ Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Reliable Daily Writing & Navigation | 0/4 | Not started | - |
+| 1. Reliable Daily Writing & Navigation | 1/4 | In Progress|  |
 | 2. Inline Tagging with Visual Pills | 0/TBD | Not started | - |
 | 3. Reliable Tag Search & Matching | 0/TBD | Not started | - |
