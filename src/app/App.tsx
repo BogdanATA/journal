@@ -58,6 +58,10 @@ function App() {
   // save/load logic (dayHasContent in dayFile.ts remains the single
   // definition of "this day has entries" for that purpose).
   const [hasContent, setHasContent] = useState(false);
+  // True for the duration of goToDay's flush->load gap — makes the editor
+  // read-only so a fast typist can't type into the outgoing day's buffer
+  // while it's being swapped out from under them (CR-02).
+  const [navigating, setNavigating] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
 
   const { schedule, flush, cancel } = useDebouncedFlush((text) => saveDay(currentDate, text));
@@ -134,10 +138,12 @@ function App() {
    */
   const goToDay = useCallback(
     async (next: Date) => {
+      setNavigating(true);
       try {
         await flush();
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
+        setNavigating(false);
         return;
       }
       try {
@@ -148,6 +154,8 @@ function App() {
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
+      } finally {
+        setNavigating(false);
       }
     },
     [flush],
@@ -275,8 +283,10 @@ function App() {
       {error !== null && <p className="error">{error}</p>}
       {initialText !== null && (
         <EditorCanvas
+          key={format(currentDate, "yyyy-MM-dd")}
           date={currentDate}
           initialText={initialText}
+          readOnly={navigating}
           onScheduleSave={(text) => {
             schedule(text);
             setHasContent(dayHasContent(text));

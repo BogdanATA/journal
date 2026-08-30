@@ -15,8 +15,9 @@ export function EditorCanvas(props: {
   initialText: string;
   onScheduleSave: (text: string) => void;
   onFlush: () => void;
+  readOnly?: boolean;
 }) {
-  const { initialText, onScheduleSave, onFlush } = props;
+  const { initialText, onScheduleSave, onFlush, readOnly = false } = props;
 
   const themeExtension = useMemo(
     () =>
@@ -77,6 +78,7 @@ export function EditorCanvas(props: {
     <CodeMirror
       value={initialText}
       autoFocus
+      editable={!readOnly}
       basicSetup={{
         lineNumbers: false,
         foldGutter: false,
