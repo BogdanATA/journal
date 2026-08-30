@@ -4,10 +4,10 @@ current_phase: 01
 current_phase_name: Reliable Daily Writing & Navigation
 status: verifying
 stopped_at: Completed 01-04-PLAN.md
-last_updated: "2026-08-30T15:47:13.675Z"
+last_updated: "2026-08-30T15:48:26.279Z"
 last_activity: 2026-08-29
 last_activity_desc: Phase 01 execution started
-state_head: cd0e1393ee1738c69a8ddb45e410f1807fa11f69
+state_head: c82315a370637e8137083e811508bdcf6dc82c99
 progress:
   total_phases: 3
   completed_phases: 0
@@ -62,6 +62,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01 P02 | 6min | 2 tasks | 7 files |
 | Phase 01 P03 | 4min | 2 tasks | 8 files |
 | Phase 01 P04 | 27min | 2 tasks | 4 files |
+| Phase 01 P04 | 24min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -80,6 +81,8 @@ Recent decisions affecting current work:
 - [Phase 01]: Confirmed @tauri-apps/plugin-dialog's v2 confirm(message, options) signature from the installed type declarations before using it for the delete-day flow, and added flushController.cancel() so a pending debounced write can be discarded (never invoked) before a confirmed day deletion.
 - [Phase 01]: [Phase 01]: CI artifact staging directory renamed from dist/ to release-artifacts/ after the first green build run showed the frontend's own Vite dist/ output (index.html, assets/*.js, svgs) being swept into both journal-macos and journal-windows CI artifacts alongside the real installers.
 - [Phase 01]: [Phase 01]: README's unsigned-build rationale avoids the literal word 'notarization' anywhere in the file, using 'Apple Developer Program enrollment' instead, since the plan's own automated verify gate blind-greps for that substring to prevent promising a notarized build.
+- [Phase 01]: [Phase 01]: CI artifact staging directory must never be named 'dist' when tauri.conf.json's frontendDist resolves to the repo-root dist/ folder (Vite's own build output lands there via beforeBuildCommand before tauri build runs) — discovered as a Rule 1 bug on the first green CI run (artifacts included frontend index.html/assets/svg alongside installers), fixed by renaming the staging dir to release-artifacts/ in .github/workflows/build.yml. — Caught by downloading and inspecting the actual CI-produced artifacts before writing the README, rather than trusting a green run alone — a green CI status does not guarantee clean artifact contents.
+- [Phase 01]: [Phase 01]: gh CLI's default OAuth token lacked the 'workflow' scope required to push .github/workflows/*.yml for the first time — resolved via a one-time interactive gh auth refresh -h github.com -s workflow device-code flow (human browser action), surfaced as a checkpoint:human-action rather than worked around. — GitHub requires the workflow scope specifically for pushes touching workflow files, regardless of repo/contents scopes already granted — a one-time repo-setup cost, not recurring.
 
 ### Pending Todos
 
@@ -100,6 +103,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-08-30T15:47:13.668Z
+Last session: 2026-08-30T15:48:26.272Z
 Stopped at: Completed 01-04-PLAN.md
 Resume file: None
